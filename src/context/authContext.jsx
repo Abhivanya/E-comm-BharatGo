@@ -55,6 +55,7 @@ const AuthContextProvider = ({ children }) => {
       );
       const { idToken, email: userEmail } = response.data;
 
+      // Store data in localStorage
       localStorage.setItem("token", idToken);
       localStorage.setItem("email", userEmail);
 
@@ -68,11 +69,13 @@ const AuthContextProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("email");
-    setUser(null);
-    setIsLoggedIn(false);
-    alert("Logout successful");
+    if (confirm("Are you sure you want to logout")) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("email");
+      setUser(null);
+      setIsLoggedIn(false);
+      alert("Logout successful");
+    }
   };
 
   return (
