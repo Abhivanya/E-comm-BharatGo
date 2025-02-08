@@ -17,7 +17,6 @@ import { authContext } from "./context/authContext";
 const App = () => {
   const { isLoggedIn } = useContext(authContext);
 
-  // Protected Route Wrapper
   const ProtectedRoute = ({ element }) => {
     return isLoggedIn ? element : <Navigate to="/login-signup" />;
   };

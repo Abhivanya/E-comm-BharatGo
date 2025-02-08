@@ -20,7 +20,7 @@ const Navbar = () => {
     isActive ? "underline underline-offset-8" : "";
 
   return (
-    <nav className="bg-white border-b-2 flex justify-between items-center fixed top-0 z-10 w-full py-5 px-8 text-sm font-light">
+    <nav className="bg-white border-b-2 flex justify-between items-center fixed top-0 z-10 w-full py-5 px-3 md:px-8 text-sm font-light">
       <ul className="flex items-center gap-4">
         <li className="font-semibold text-lg md:inline hidden">
           <NavLink to="/">Shopi</NavLink>

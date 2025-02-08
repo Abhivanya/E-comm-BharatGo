@@ -1,15 +1,36 @@
-import React, { useContext } from "react";
-import { AiOutlinePlus } from "react-icons/ai";
+import React, { useContext, useState, useEffect } from "react";
+import { AiOutlinePlus, AiOutlineCheck } from "react-icons/ai";
 import { cartContext } from "../../context/cartContext";
+import { authContext } from "../../context/authContext";
+import { useNavigate } from "react-router-dom";
 
 const Card = ({ viewDetails, product }) => {
-  const { images, title, price, category } = product;
-  const { addToCart } = useContext(cartContext);
+  const { images, title, price } = product;
+  const { addToCart, setIsCartOpen, cart } = useContext(cartContext);
+  const { isLoggedIn } = useContext(authContext);
+  const [isAdded, setIsAdded] = useState(false);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const itemInCart = cart.some((item) => item.id === product.id);
+    if (isLoggedIn) {
+      setIsAdded(itemInCart);
+    }
+  }, [cart, product.id]);
 
   const handleAdd = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    addToCart(product);
+    if (!isLoggedIn) {
+      navigate("/login-signup");
+      return;
+    }
+    if (!isAdded) {
+      addToCart(product);
+      setIsCartOpen(true);
+      setIsAdded(true);
+    }
   };
 
   return (
@@ -28,10 +49,17 @@ const Card = ({ viewDetails, product }) => {
           onError={(e) => (e.target.src = "/fallback-image.png")}
         />
         <button
-          className="absolute m-2 top-0 right-0 flex justify-center items-center bg-white w-6 h-6 rounded-full"
-          aria-label={`Add ${title} to cart`}
+          className={`absolute m-2 top-0 right-0 flex justify-center items-center w-6 h-6 rounded-full`}
+          aria-label={`${
+            isAdded ? `${title} already in cart` : `Add ${title} to cart`
+          }`}
+          onClick={handleAdd}
         >
-          <AiOutlinePlus className="h-5 w-5 text-black" onClick={handleAdd} />
+          {isAdded ? (
+            <AiOutlineCheck className="h-5 w-5 text-white bg-black rounded-full" />
+          ) : (
+            <AiOutlinePlus className="h-5 w-5 rounded-full bg-white text-black" />
+          )}
         </button>
       </figure>
       <p className="flex justify-between items-center">
